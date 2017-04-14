@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Animated, Easing } from 'react-native';
 
-export default class MarqueeTextVertical extends Component {
+export default class MarqueeLabelVertical extends Component {
   state = {
     started: false // use state for this variable to make sure that any change would affect UI
   };
