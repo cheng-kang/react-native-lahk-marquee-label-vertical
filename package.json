@@ -1,6 +1,6 @@
 {
   "name": "react-native-lahk-marquee-label-vertical",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A react-native marquee(vertical) label component.",
   "main": "index.js",
   "scripts": {
