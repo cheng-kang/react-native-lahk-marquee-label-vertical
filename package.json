@@ -1,0 +1,25 @@
+{
+  "name": "react-native-lahk-marquee-label-vertical",
+  "version": "1.0.0",
+  "description": "A react-native marquee(vertical) label component.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cheng-kang/react-native-lahk-marquee-label-vertical.git"
+  },
+  "keywords": [
+    "marquee",
+    "vertical",
+    "label",
+    "react-native"
+  ],
+  "author": "CHENGKANG",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cheng-kang/react-native-lahk-marquee-label-vertical/issues"
+  },
+  "homepage": "https://github.com/cheng-kang/react-native-lahk-marquee-label-vertical#readme"
+}
