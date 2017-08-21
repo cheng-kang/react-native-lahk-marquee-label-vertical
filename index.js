@@ -1,80 +1,102 @@
 import React, { Component } from 'react';
-import { View, Animated, Easing } from 'react-native';
+import { View, Animated, Easing, Text } from 'react-native';
 
 export default class MarqueeLabelVertical extends Component {
   state = {
-    started: false // use state for this variable to make sure that any change would affect UI
+    textWidth: 0,
+    textHeight: 0,
+    bgViewHeight: 0,
+    duration: 0,
+    text: '',
+    animation: null
   };
 
   componentWillMount() {
+    this.setState({
+      text: this.props.text || this.props.children || ''
+    })
+    this.animation = null
     this.animatedTransformY = new Animated.Value(0);
-    this.bgViewHeight = 0;
-    this.textHeight = 0;
-    this.duration = 0;
-
-    this.shouldFinish = false;
   }
 
   componentWillUnmount() {
-    this.shouldFinish = true;
+    if (this.state.animation !== null) {
+      this.state.animation.stop();
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    let newText = nextProps.text || nextProps.children || '';
+    let oldText = this.props.text || this.props.children || '';
+    if (newText !== oldText) {
+      this.state.animation.stop();
+      this.setState({
+        text: newText,
+        textWidth: 0,
+        textHeight: 0,
+        duration: 0,
+        animation: null
+      });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    let { textHeight, bgViewHeight, duration, animation } = this.state;
+
+    if (duration === 0) {
+      if (textHeight === 0 || bgViewHeight === 0) { return }
+
+      const { duration, speed } = this.props;
+      if (duration !== undefined) {
+        this.setState({
+          duration: duration
+        });
+      } else if (speed !== undefined) {
+        this.setState({
+          duration: ((bgViewHeight + textHeight) / speed) * 1000
+        });
+      }
+    } else {
+      if (animation === null) {
+        this.animatedTransformY.setValue(bgViewHeight);
+        this.setState({
+          animation: Animated.timing(this.animatedTransformY, {
+            toValue: -textHeight,
+            duration: duration,
+            useNativeDriver: true,
+            easing: Easing.linear
+          })
+        })
+      } else {
+        animation.start(() => {
+          this.setState({
+            animation: null
+          })
+        });
+      }
+    }
   }
 
   textOnLayout(e) {
-    this.textHeight = e.nativeEvent.layout.height;
-
-    if (this.bgViewHeight !== 0) {
-      this.prepareToAnimate()
-    }
+    this.setState({
+      textWidth: e.nativeEvent.layout.width,
+      textHeight: e.nativeEvent.layout.height
+    });
   }
 
   bgViewOnLayout(e) {
-    this.bgViewHeight = e.nativeEvent.layout.height;
-
-    if (this.textHeight !== 0) {
-      this.prepareToAnimate()
-    }
-  }
-
-  prepareToAnimate() {
-    // Calculate this.duration by this.props.duration / this.props.speed
-    // If this.props.duration is set, discard this.props.speed
-    const { duration, speed } = this.props;
-    if (duration !== undefined) {
-      this.duration = duration;
-    } else if (speed !== undefined) {
-      this.duration = ((this.bgViewHeight + this.textHeight) / speed) * 1000;
-    }
-    this.animate();
-  }
-
-  animate() {
-    this.animatedTransformY.setValue(this.bgViewHeight);
-    if (!this.state.started) {
-      this.setState({
-        started: true
-      });
-    }
-    Animated.timing(this.animatedTransformY, {
-        toValue: -this.textHeight,
-        duration: this.duration,
-        useNativeDriver: true,
-        easing: Easing.linear
-    }).start(() => {
-      if (!this.shouldFinish) {
-        this.animate()
-      }
+    this.setState({
+      bgViewHeight: e.nativeEvent.layout.height
     });
   }
 
   render() {
     const { 
-      children, 
-      text,
       bgViewStyle, // Backgound View Custom Styles
-      textStyle, // Text Custom Styles
+      textStyle, // Text Custom Styles, e.g. {textAlign: 'center'}
     } = this.props;
 
-    const { started } = this.state;
+    const { text, animation } = this.state;
 
     return (
       <View 
@@ -84,14 +106,22 @@ export default class MarqueeLabelVertical extends Component {
         <Animated.Text 
           style={{
             transform: [{ translateY: this.animatedTransformY }],
-            opacity: started ? 1 : 0,
+            opacity: animation !== null ? 1 : 0,
             ...styles.textStyle,
+            ...textStyle
+          }}
+        >
+          {text}
+        </Animated.Text>
+        <Text
+          style={{
+            ...styles.textSizeMeasuringViewStyle,
             ...textStyle
           }}
           onLayout={(event) => this.textOnLayout(event)}
         >
-          {children || text || ' '}
-        </Animated.Text>
+          {text}
+        </Text>
       </View>
     );
   }
@@ -108,5 +138,9 @@ const styles = {
   },
   textStyle: {
     width: '100%'
+  },
+  textSizeMeasuringViewStyle: {
+    opacity: 0,
+    fontSize: 20
   }
 };

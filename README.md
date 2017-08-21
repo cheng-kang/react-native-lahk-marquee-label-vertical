@@ -9,7 +9,8 @@ A react-native marquee(vertical) label component.
 2. [Install](#install)
 3. [Usage](#usage)
 4. [Props](#props)
-5. [中文介绍](#中文介绍)
+5. [Update Log](#update-log)
+6. [中文介绍](#中文介绍)
 
 ## Desc
 
@@ -70,6 +71,13 @@ or
 - `speed`: number(unit: px/s, px per second), the speed of the marquee. Alternative to `duration`.
 - `bgViewStyle`: stylesheet object, background view component custom styles.
 - `textStyle`: stylesheet object, text component custom styles.
+
+## Update Log
+
+### 2017.08.21 `Version 1.1.0`
+
+- Dynamic Text Support: now you can use dynamic text with this component :D
+
 
 ## 中文介绍
 
