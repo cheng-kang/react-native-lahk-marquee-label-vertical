@@ -65,7 +65,7 @@ export default class MarqueeLabelVertical extends Component {
             duration: duration,
             useNativeDriver: true,
             easing: Easing.linear,
-          })
+          }),
         }, () => {
           this.state.animation.start(() => {
             this.setState({
