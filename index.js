@@ -8,14 +8,14 @@ export default class MarqueeLabelVertical extends Component {
     bgViewHeight: 0,
     duration: 0,
     text: '',
-    animation: null
+    animation: null,
   };
 
   componentWillMount() {
     this.setState({
-      text: this.props.text || this.props.children || ''
-    })
-    this.animation = null
+      text: this.props.text || this.props.children || '',
+    });
+    this.animation = null;
     this.animatedTransformY = new Animated.Value(0);
   }
 
@@ -35,7 +35,7 @@ export default class MarqueeLabelVertical extends Component {
         textWidth: 0,
         textHeight: 0,
         duration: 0,
-        animation: null
+        animation: null,
       });
     }
   }
@@ -49,11 +49,11 @@ export default class MarqueeLabelVertical extends Component {
       const { duration, speed } = this.props;
       if (duration !== undefined) {
         this.setState({
-          duration: duration
+          duration: duration,
         });
       } else if (speed !== undefined) {
         this.setState({
-          duration: ((bgViewHeight + textHeight) / speed) * 1000
+          duration: ((bgViewHeight + textHeight) / speed) * 1000,
         });
       }
     } else {
@@ -64,14 +64,14 @@ export default class MarqueeLabelVertical extends Component {
             toValue: -textHeight,
             duration: duration,
             useNativeDriver: true,
-            easing: Easing.linear
+            easing: Easing.linear,
           })
-        })
-      } else {
-        animation.start(() => {
-          this.setState({
-            animation: null
-          })
+        }, () => {
+          this.state.animation.start(() => {
+            this.setState({
+              animation: null,
+            });
+          });
         });
       }
     }
@@ -80,19 +80,19 @@ export default class MarqueeLabelVertical extends Component {
   textOnLayout(e) {
     this.setState({
       textWidth: e.nativeEvent.layout.width,
-      textHeight: e.nativeEvent.layout.height
+      textHeight: e.nativeEvent.layout.height,
     });
   }
 
   bgViewOnLayout(e) {
     this.setState({
-      bgViewHeight: e.nativeEvent.layout.height
+      bgViewHeight: e.nativeEvent.layout.height,
     });
   }
 
   render() {
     const { 
-      bgViewStyle, // Backgound View Custom Styles
+      bgViewStyle, // Background View Custom Styles
       textStyle, // Text Custom Styles, e.g. {textAlign: 'center'}
     } = this.props;
 
@@ -108,7 +108,7 @@ export default class MarqueeLabelVertical extends Component {
             transform: [{ translateY: this.animatedTransformY }],
             opacity: animation !== null ? 1 : 0,
             ...styles.textStyle,
-            ...textStyle
+            ...textStyle,
           }}
         >
           {text}
@@ -116,7 +116,7 @@ export default class MarqueeLabelVertical extends Component {
         <Text
           style={{
             ...styles.textSizeMeasuringViewStyle,
-            ...textStyle
+            ...textStyle,
           }}
           onLayout={(event) => this.textOnLayout(event)}
         >
@@ -134,13 +134,13 @@ const styles = {
     justifyContent: 'flex-start',
     overflow: 'scroll',
     paddingLeft: 20,
-    paddingRight: 20
+    paddingRight: 20,
   },
   textStyle: {
-    width: '100%'
+    width: '100%',
   },
   textSizeMeasuringViewStyle: {
     opacity: 0,
-    fontSize: 20
-  }
+    fontSize: 20,
+  },
 };
